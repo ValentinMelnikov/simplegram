@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'djangogram.wsgi.application'
 DATABASES = {
      "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "djangogram",
+        "NAME": "django",
         "USER": "postgres",
         "PASSWORD": "733362",
         "HOST": os.environ.get('DB_HOST', 'localhost'),
