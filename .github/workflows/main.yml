@@ -1,1 +1,32 @@
+name: "Django deploy workflow"
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install ssh key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: 'any_host'
+      - name: clone repo and create environment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          scripts: |
+            cd /home/simplegram
+            git pull
+            cd djangogram/
+            docker compose down --remove-orphans
+            docker compose build
+            docker compose up -d
+            systemctl restart nginx
+            exit
